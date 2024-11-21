@@ -1,13 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ItemProps, Product } from "../types";
-import axios from "axios";
 import ProductItem from "./productItem";
-import Search from "./Search";
-import useProduct from "../hooks/useProduct";
+import { useDebounce, useProduct } from "../hooks";
+
 const ProductContainer = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1);
-  const { isLoading, products, allowLoadMore } = useProduct(page);
-
+  const [search, setSearch] = useState<string>("");
+  const debounceSearch = useDebounce(search, 500);
+  const { isLoading, products, allowLoadMore } = useProduct(
+    page,
+    debounceSearch
+  );
+  console.log(debounceSearch);
   //handle infinite scroll
   const observer = useRef<IntersectionObserver>();
   const lastProductRef = useCallback(
@@ -20,29 +23,29 @@ const ProductContainer = (): React.JSX.Element => {
         }
       });
       if (node) observer.current.observe(node);
-      console.log("tao", node);
     },
     [isLoading, allowLoadMore]
   );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+  //   console.log(products);
 
-  //   const handleScroll = useCallback(() => {
-  //     const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
-  //     if (scrollHeight - scrollTop <= clientHeight + 10) {
-  //       setIsLoading(true);
-  //       getMoreProducts(limit, page * limit);
-  //       setPage(page + 1);
-  //     }
-  //   }, [isLoading]);
-
-  //   useEffect(() => {
-  //     window.addEventListener("scroll", handleScroll);
-  //     return () => window.removeEventListener("scroll", handleScroll);
-  //   }, [handleScroll]);
-
-  console.log(products);
+  useEffect(() => {
+    setPage(1);
+  }, [debounceSearch]);
   return (
     <div className="py-5">
-      <Search />
+      <div className="mx-5 my-5 rounded-sm">
+        <input
+          type="text"
+          onChange={handleChange}
+          value={search}
+          className="border border-gray-300 rounded-sm w-[500px] p-2 outline-none"
+          name="search"
+          placeholder="search by product name"
+        />
+      </div>
       <>
         {products &&
           products.map((product, index) => {
