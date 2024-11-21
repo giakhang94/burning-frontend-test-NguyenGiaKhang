@@ -14,8 +14,8 @@ const ProductContainer = (): React.JSX.Element => {
     const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
     if (scrollHeight - scrollTop <= clientHeight + 10) {
       setIsLoading(true);
-      setPage(page + 1);
       getMoreProducts(limit, page * limit);
+      setPage(page + 1);
     }
   }, [isLoading]);
   useEffect(() => {
