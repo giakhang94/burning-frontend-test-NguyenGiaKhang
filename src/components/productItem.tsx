@@ -7,7 +7,7 @@ const ProductItem = (props: ItemProps): React.JSX.Element => {
         <img
           src={props.thumbnail}
           alt="product thumbnail"
-          className="w-full h-full"
+          className="w-full h-full object-cover"
         />
       </div>
       <div className="flex-1">

@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Product } from "../types";
 import axios from "axios";
-const useProduct = () => {
+const useProduct = (page: number) => {
+  const limit = 3;
   const [isLoading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[] | null>(null);
+  const [allowLoadMore, setAllowLoadMore] = useState(false);
   const getProducts = async (limit?: number) => {
     try {
       const { data } = await axios.get(
-        `https://dummyjson.com/products?limit=${limit || 20}`
+        `https://dummyjson.com/products?limit=${limit || 20}&skip=0`
       );
       setLoading(false);
       setProducts(data.products);
@@ -15,13 +17,24 @@ const useProduct = () => {
       console.log(err);
     }
   };
-  const getMoreProducts = async (limit: number, skip: number) => {
+  const getMoreProducts = async (
+    limit: number,
+    skip: number,
+    search?: string
+  ) => {
     try {
       const { data } = await axios.get(
-        `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
+        `https://dummyjson.com/products/search?q=${
+          search || ""
+        }&limit=${limit}&skip=${skip}`
       );
+      setAllowLoadMore(data.products.length > 0);
       setLoading(false);
-      setProducts((prev) => [...prev!, ...data.products]);
+      if (products) {
+        setProducts((prev) => [...prev!, ...data.products]);
+      } else {
+        setProducts(data.products);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -29,7 +42,15 @@ const useProduct = () => {
   const setIsLoading = (loading: boolean) => {
     setLoading(loading);
   };
-  return { isLoading, products, setIsLoading, getProducts, getMoreProducts };
+  useEffect(() => {
+    setIsLoading(true);
+    getMoreProducts(limit, (page - 1) * limit, "");
+  }, [page]);
+  return {
+    isLoading,
+    products,
+    allowLoadMore,
+  };
 };
 
 export default useProduct;
