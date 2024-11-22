@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import ProductItem from "./productItem";
-import { useDebounce, useProduct } from "../hooks";
 
-const ProductContainer = (): React.JSX.Element => {
+import useProduct from "./hooks/useProduct";
+import { useDebounce } from "../../hooks";
+import { ProductItem } from "../../pages/Products/components";
+import Search from "../../pages/Products/components/Search";
+
+const InfiniteScroll = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1);
   const [search, setSearch] = useState<string>("");
   const debounceSearch = useDebounce(search, 500);
@@ -10,7 +13,7 @@ const ProductContainer = (): React.JSX.Element => {
     page,
     debounceSearch
   );
-  console.log(debounceSearch);
+
   //handle infinite scroll
   const observer = useRef<IntersectionObserver>();
   const lastProductRef = useCallback(
@@ -26,17 +29,20 @@ const ProductContainer = (): React.JSX.Element => {
     },
     [isLoading, allowLoadMore]
   );
+
+  //handle search
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
   };
-  //   console.log(products);
 
   useEffect(() => {
     setPage(1);
   }, [debounceSearch]);
+
   return (
     <div className="py-5">
-      <div className="mx-5 my-5 rounded-sm">
+      <Search page={page} value={search} onChange={handleChange} />
+      {/* <div className="mx-5 mb-5 rounded-sm">
         <input
           type="text"
           onChange={handleChange}
@@ -45,7 +51,7 @@ const ProductContainer = (): React.JSX.Element => {
           name="search"
           placeholder="search by product name"
         />
-      </div>
+      </div> */}
       <>
         {products &&
           products.map((product, index) => {
@@ -76,8 +82,13 @@ const ProductContainer = (): React.JSX.Element => {
             }
           })}
         {isLoading && <div className="mx-5 font-semibold my-2">Loading...</div>}
+        {!isLoading && products?.length === 0 && (
+          <div className="mx-5 font-semibold my-2">
+            There's no product to display!
+          </div>
+        )}
       </>
     </div>
   );
 };
-export default ProductContainer;
+export default InfiniteScroll;

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Product } from "../types";
+
 import axios from "axios";
+import { LIMIT as limit } from "../../../constants";
+import { Product } from "../../../types";
 const useProduct = (page: number, search?: string) => {
-  const limit = 20;
   const [isLoading, setLoading] = useState(false);
   const [products, setProducts] = useState<Product[] | null>(null);
   const [allowLoadMore, setAllowLoadMore] = useState(false);

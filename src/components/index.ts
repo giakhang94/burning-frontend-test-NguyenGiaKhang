@@ -1,4 +1,3 @@
-import ProductContainer from "./productContainer";
-import ProductItem from "./productItem";
+import InfiniteScroll from "./InfiniteScroll/InfiniteScroll";
 
-export { ProductContainer, ProductItem };
+export { InfiniteScroll };

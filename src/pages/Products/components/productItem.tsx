@@ -1,4 +1,4 @@
-import { ItemProps } from "../types";
+import { ItemProps } from "../../../types";
 
 const ProductItem = (props: ItemProps): React.JSX.Element => {
   return (
