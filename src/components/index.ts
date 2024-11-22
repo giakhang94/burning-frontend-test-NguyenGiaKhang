@@ -1,5 +1,3 @@
-import ProductContainer from "./productContainer";
-import ProductItem from "./productItem";
-import Search from "./Search";
+import InfiniteScroll from "./InfiniteScroll/InfiniteScroll";
 
-export { ProductContainer, ProductItem, Search };
+export { InfiniteScroll };
