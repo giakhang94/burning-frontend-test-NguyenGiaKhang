@@ -1,7 +1,3 @@
-import { useEffect, useState } from "react";
-import { useDebounce } from "../../../hooks";
-import useProduct from "../../../components/InfiniteScroll/hooks/useProduct";
-
 interface SearchProps {
   page: number;
   value: string;
