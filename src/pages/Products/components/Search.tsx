@@ -8,17 +8,8 @@ interface SearchProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 const Search = ({ page, onChange, value }: SearchProps): React.JSX.Element => {
-  const [pageSearch, setPageSearch] = useState<number>(page);
-  const [search, setSearch] = useState<string>("");
-  const debouncedSearch = useDebounce(search, 800);
-  const { isLoading } = useProduct(page, debouncedSearch);
-
-  useEffect(() => {
-    setPageSearch(1);
-  }, [debouncedSearch]);
   return (
     <div className="mx-5 mb-5 rounded-sm">
-      {isLoading && <></>}
       <input
         type="text"
         onChange={onChange}

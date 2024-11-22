@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import axios from "axios";
-import { LIMIT as limit } from "../../../constants";
+import { LIMIT as limit, PRODUCT_URL } from "../../../constants";
 import { Product } from "../../../types";
 const useProduct = (page: number, search?: string) => {
   const [isLoading, setLoading] = useState(false);
@@ -15,11 +15,9 @@ const useProduct = (page: number, search?: string) => {
   ) => {
     try {
       const { data } = await axios.get(
-        `https://dummyjson.com/products/search?q=${
-          search || ""
-        }&limit=${limit}&skip=${skip}`
+        `${PRODUCT_URL}/search?q=${search || ""}&limit=${limit}&skip=${skip}`
       );
-      setAllowLoadMore(data.products.length > 0);
+      setAllowLoadMore(skip + limit < data.total);
       setLoading(false);
       if (page === 1) {
         setProducts([]);
