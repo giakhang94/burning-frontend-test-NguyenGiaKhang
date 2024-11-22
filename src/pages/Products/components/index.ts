@@ -1,3 +1,3 @@
-import ProductItem from "./productItem";
+import ProductItem from "./ProductItem";
 
 export { ProductItem };
