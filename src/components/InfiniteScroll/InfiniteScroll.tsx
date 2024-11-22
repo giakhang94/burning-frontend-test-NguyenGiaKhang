@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import useProduct from "./hooks/useProduct";
 import { useDebounce } from "../../hooks";
-import { ProductItem } from "../../pages/Products/components";
+
 import Search from "../Search";
+import { ProductItem } from "../../pages/Products/components";
 
 const InfiniteScroll = (): React.JSX.Element => {
   const [page, setPage] = useState<number>(1);
